@@ -21,7 +21,9 @@
     "@rollup/plugin-json": "^4.1.0",
     "animejs": "^3.2.1",
     "curtainsjs": "^8.1.0",
+    "locomotive-scroll": "^4.1.0",
     "rollup-plugin-glslify": "^1.2.0",
+    "sharp": "^0.27.2",
     "sirv-cli": "^1.0.11"
   }
 }

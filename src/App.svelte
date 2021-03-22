@@ -1,117 +1,121 @@
 <script>
-  import { Curtains, Plane } from "curtainsjs";
   import { onMount } from "svelte";
-  import vertex from "./assets/init.vert";
-  import fragment from "./assets/init.frag";
-  export let name;
-  let curtains, plane, webgl, backstage;
-  function curtainsInit() {
-    curtains = new Curtains({
-      container: webgl,
-    });
-  }
-  function initPlane() {
-    plane = new Plane();
-  }
+  import LocomotiveScroll from "locomotive-scroll";
+  let holder,
+    scrollTop = 0,
+    targetScroll = 0;
   onMount(() => {
-    curtainsInit();
-    const planeElement = document.getElementsByClassName("plane")[0];
-    const params = {
-      vertexShader: vertex, // our vertex shader ID
-      fragmentShader: fragment, // our fragment shader ID
-      uniforms: {
-        time: {
-          name: "uTime", // uniform name that will be passed to our shaders
-          type: "1f", // this means our uniform is a float
-          value: 0,
-        },
-      },
+    // const scroll = new LocomotiveScroll({
+    //   el: document.querySelector("[data-scroll-container]"),
+    //   smooth: true,
+    //   getSpeed: true,
+    // });
+    const html = document.documentElement;
+    const canvas = document.getElementById("hero-lightpass");
+    const context = canvas.getContext("2d");
+
+    const frameCount = 1153;
+    const currentFrame = (index) => `/image/frames2/frame  (${index}).webp`;
+
+    let images = [null]; // since everything else is 1-indexed, explicitly fill images[0]
+    const preloadImages = () => {
+      for (let i = 1; i < frameCount; i++) {
+        images[i] = new Image();
+        images[i].src = currentFrame(i);
+      }
     };
-    // create our plane using our curtains object, the HTML element and the parameters
-    const plane = new Plane(curtains, planeElement, params);
-    console.log(plane);
-    plane.onReady(() => {
-      plane.playVideos();
-    });
-    plane.onRender(() => {
-      //   backstage.currentTime = 36;
-      //   plane.textures[0].needUpdate();
-      // use the onRender method of our plane fired at each requestAnimationFrame call
-      //   plane.uniforms.time.value++; // update our time uniform value
+    preloadImages();
+
+    const img = new Image();
+    img.src = currentFrame(1);
+    canvas.width = 1920;
+    canvas.height = 1000;
+    img.onload = function () {
+      context.drawImage(img, 0, 0);
+    };
+
+    const updateImage = (index) => {
+      context.drawImage(images[index], 0, 0);
+    };
+    // scroll.on("scroll", (func) => {
+    //   const scrollTop = func.scroll.y;
+    //   const maxScrollTop = holder.scrollHeight - window.innerHeight;
+    //   const scrollFraction = scrollTop / maxScrollTop;
+    //   console.log(func);
+    //   const frameIndex = Math.min(
+    //     frameCount - 1,
+    //     Math.ceil(scrollFraction * frameCount)
+    //   );
+    //   console.log(frameIndex);
+    //   requestAnimationFrame(() => updateImage(frameIndex + 1));
+    // });
+
+    const raf = () => {
+      targetScroll += (scrollTop - targetScroll) * 0.1;
+      // console.log(targetScroll);
+      // console.log("raf");
+
+      const maxScrollTop = html.scrollHeight - window.innerHeight;
+      const scrollFraction = targetScroll / maxScrollTop;
+      const frameIndex = Math.min(
+        frameCount - 1,
+        Math.ceil(scrollFraction * frameCount)
+      );
+      // debugger;
+      updateImage(frameIndex + 1);
+      requestAnimationFrame(raf);
+    };
+    raf();
+    window.addEventListener("scroll", () => {
+      //const
+      scrollTop = html.scrollTop;
+
+      // const scrollFraction = scrollTop / maxScrollTop;
+      // const frameIndex = Math.min(
+      //   frameCount - 1,
+      //   Math.ceil(scrollFraction * frameCount)
+      // );
+
+      // requestAnimationFrame(() => updateImage(frameIndex + 1));
     });
   });
 </script>
 
-<main>
-  <h1>Hello {name}!</h1>
-  <p>
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-    how to build Svelte apps.
-  </p>
-  <div class="plane">
-    <video
-      bind:this={backstage}
-      style="display: none"
-      width="50%"
-      class="preloader__img"
-      playsinline
-      autoplay
-      loop
-      muted
-      src="/image/backstage.mp4"
-    />
-    <!-- <img
-      crossorigin="anonimous"
-      decoding="async"
-      draggable="false"
-      src="/image/1.jpg"
-      alt=""
-    /> -->
-  </div>
-
-  <div bind:this={webgl} id="curtains" />
-</main>
+<div
+  data-scroll-speed="4"
+  bind:this={holder}
+  data-scroll-container
+  id="stick"
+  class="holder"
+>
+  <canvas
+    data-scroll
+    data-scroll-sticky
+    data-scroll-target="#stick"
+    id="hero-lightpass"
+  />
+</div>
 
 <style>
-  .plane {
-    width: 80vw;
-    height: 90vh;
-    margin: auto;
-  }
-  .plane > video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: none;
-  }
-  #curtains {
-    /* make the canvas wrapper fits the document */
-    position: absolute;
-    top: 0;
-    right: 0;
-    /* bottom: 0;
-	 */
+  /* :global(html) {
     height: 100vh;
-    left: 0;
-  }
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
+  } */
+  :global(body) {
+    padding: 0px;
   }
 
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
+  .holder {
+    height: calc(1153px * 25);
+    background: #000;
   }
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
+  canvas {
+    display: block;
+    position: fixed;
+    left: 50vw;
+    transform: translateX(-50%);
+    margin: auto;
+    width: auto;
+    height: 100vh;
   }
 </style>
