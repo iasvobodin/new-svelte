@@ -14,13 +14,16 @@
     const canvas = document.getElementById("hero-lightpass");
     const context = canvas.getContext("2d");
 
-    const frameCount = 1000;
-    const currentFrame = (index) => `/frames2/frame  (${index}).webp`;
+    const frameCount = 1150;
+    // const currentFrame = (index) => `/frames2/frame  (${index}).webp`;
+    const currentFrame = (index) =>
+      `https://res.cloudinary.com/dmxcnqgq9/image/upload/w_${window.innerWidth}/frame_${index}.webp`;
 
     let images = [null]; // since everything else is 1-indexed, explicitly fill images[0]
     const preloadImages = () => {
       for (let i = 1; i < frameCount; i++) {
         images[i] = new Image();
+        images[i].crossOrigin = "Anonymous";
         images[i].src = currentFrame(i);
       }
     };
@@ -28,8 +31,8 @@
 
     const img = new Image();
     img.src = currentFrame(1);
-    canvas.width = 1920;
-    canvas.height = 1000;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     img.onload = function () {
       context.drawImage(img, 0, 0);
     };
@@ -105,7 +108,7 @@
   }
 
   .holder {
-    height: calc(1153px * 25);
+    height: calc(1150px * 25);
     background: #000;
   }
 
