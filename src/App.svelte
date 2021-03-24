@@ -84,6 +84,14 @@
   });
 </script>
 
+<svelte:head>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400&family=Cormorant+Infant&display=swap"
+    rel="stylesheet"
+  />
+</svelte:head>
+
 <div
   data-scroll-speed="4"
   bind:this={holder}
@@ -91,6 +99,11 @@
   id="stick"
   class="holder"
 >
+  <div class="main__description">
+    <h1 class="header">SvobodinaPhoto</h1>
+    <p class="sub__title">Больше чем просто фотография</p>
+  </div>
+
   <canvas
     data-scroll
     data-scroll-sticky
@@ -98,27 +111,54 @@
     id="hero-lightpass"
   />
 </div>
+<div class="block2" />
 
 <style>
-  /* :global(html) {
+  .main__description {
+    display: grid;
+    width: 100%;
     height: 100vh;
-  } */
-  :global(body) {
-    padding: 0px;
+    /* transform: scale(0.5) translate(-100% -100%); */
+    background: url(/image/ggr.svg) left top / 100% 100vh no-repeat;
+    grid-template-rows: 1fr 1fr 2fr 4fr 2.66fr 5.33fr 5.33fr 4.33fr 2.83fr 3.5fr 3.5fr 2.83fr 4.33fr 5.33fr 5.33fr 2.66fr 4fr 2fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 2fr 4fr 2.66fr 5.33fr 5.33fr 4.33fr 2.83fr 3.5fr 3.5fr 2.83fr 4.33fr 5.33fr 5.33fr 2.66fr 4fr 2fr 1fr 1fr;
+    top: 0px;
+    position: fixed;
   }
 
+  .sub__title {
+    font-family: "Comfortaa", cursive;
+    top: 1vh;
+    margin: 0;
+    font-size: 3vw;
+    color: rgba(255, 255, 255, 0.452);
+  }
+  .header {
+    font-family: "Cormorant Infant", serif;
+    top: 7vh;
+    margin: 0;
+    font-size: 10vw;
+    color: rgba(255, 255, 255, 0.445);
+  }
   .holder {
     height: calc(1150px * 25);
     background: #000;
+    position: relative;
+  }
+  .block2 {
+    height: 100vh;
+    background-color: #fff;
   }
 
   canvas {
     display: block;
-    position: fixed;
-    left: 50vw;
-    transform: translateX(-50%);
-    margin: auto;
+    position: sticky;
+    top: 35vh;
+    left: 10vw;
     width: auto;
-    height: 100vh;
+    height: 50vh;
+  }
+  :global(body) {
+    padding: 0px;
   }
 </style>
