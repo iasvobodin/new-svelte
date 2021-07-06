@@ -105,7 +105,7 @@
   }
 
   .holder {
-    height: calc(1153px * 25);
+    height: calc(1000px * 25);
     background: #000;
   }
 
