@@ -20,6 +20,7 @@
   "dependencies": {
     "@rollup/plugin-json": "^4.1.0",
     "animejs": "^3.2.1",
+    "cloudinary-core": "^2.11.3",
     "curtainsjs": "^8.1.0",
     "locomotive-scroll": "^4.1.0",
     "rollup-plugin-glslify": "^1.2.0",
