@@ -18,6 +18,7 @@
     let lettersMove = anime({
       targets: ".letter",
       translateY: "-100%",
+      translateX: "-100%",
       opacity: 0,
       delay: anime.stagger(150),
       autoplay: false,
