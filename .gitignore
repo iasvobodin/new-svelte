@@ -1,5 +1,5 @@
 /node_modules/
+/public/frames/
 /public/build/
 /public/image/
-
 .DS_Store
